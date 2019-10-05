@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="Simple SWF Layout" package="org.openfl.samples.simpleswflayout" version="1.0.0" company="OpenFL" />
+	<app main="Main" path="Export" file="SimpleSWFLayout" />
+	
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	<haxelib name="layout" />
+	<haxelib name="trilateral" />
+    <haxelib name="actuate" />
+	<library path="Assets/swf-library.swf" preload="true" />
+	<assets path="Assets" rename="assets" include="*.mp4" if="flash || html5" embed="false" />
+</project>
