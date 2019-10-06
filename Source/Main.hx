@@ -43,16 +43,16 @@ class Main extends Sprite {
     function createMonsters(){
         dragon = new Dragon( cast this );
         bat    = new Bat( this );
-        tiny   = new Tiny( bat.holder );
+        tiny   = new Tiny( this );
     }
     function hitDragon( x: Float, y: Float ): Bool {
         var over = simpleHit( dragon.holder, new Point( x, y ) );//pixelPerfectHitTest( dragon.holder, new Point( x, y ) );
         if( over ){
-            dragon.holder.alpha = 0.5;
-            //dragon.updateState( OVER );
+            //dragon.holder.alpha = 0.5;
+            dragon.updateState( OVER );
         } else {
-            dragon.holder.alpha = 1;
-            //dragon.updateState( OUT );
+            //dragon.holder.alpha = 1;
+            dragon.updateState( OUT );
         }
         return over;
     }
@@ -69,8 +69,9 @@ class Main extends Sprite {
         var current = Lib.current;
         var stage = current.stage;
         tiny.position( stage.mouseX - tiny.holder.width/2, stage.mouseY - tiny.holder.height/2 );
-        trace( hitDragon( stage.mouseX, stage.mouseY ) );
         dragon.update();
+        trace( hitDragon( stage.mouseX, stage.mouseY ) );
+        
     }
     inline
     function update(): Void {
