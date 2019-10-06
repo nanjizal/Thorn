@@ -7,10 +7,12 @@ import openfl.events.MouseEvent;
 import openfl.utils.ByteArray;
 import openfl.Assets;
 import openfl.Lib;
-
+import thorn.visual.MovieUtil;
 import motion.easing.Quad;
 import motion.easing.Linear;
 import motion.Actuate;
+
+using thorn.visual.MovieUtil;
 @:enum
 abstract State( Int ){
     var OUT = 0;
@@ -25,10 +27,7 @@ class Dragon {
     var clip: MovieClip;
     var state = OUT;
     var glowDragon: MovieClip;
-    var glowLeg0: MovieClip;
-    var glowLeg1: MovieClip;
-    var glowLeg2: MovieClip;
-    var glowLeg3: MovieClip;
+    var glowLegs = new Array<MovieClip>();
     // getter and setter of glow.
     // this should be tweenable eg: 
     // Actuate.tween(this, 1., { glow: 1. }).ease( Quad.easeInOut );//.delay(1);
@@ -41,10 +40,7 @@ class Dragon {
     }
     function set_glow( alpha: Float ) {
       glowDragon.alpha = 1.-alpha;
-      glowLeg0.alpha = 1.-alpha;
-      glowLeg1.alpha = 1.-alpha;
-      glowLeg2.alpha = 1.-alpha;
-      glowLeg3.alpha = 1.-alpha;
+      for( leg in glowLegs ) leg.alpha = 1.-alpha;
       return this.glow = alpha;
     }
     public function new( scope: Sprite ){
@@ -58,17 +54,15 @@ class Dragon {
         holder.addChild( clip );
     }
     function createGlowDragon(){
-        var innerDragon: MovieClip = cast( clip.getChildByName('innerDragon'), MovieClip );
-        var bodyDragon: MovieClip = cast( innerDragon.getChildByName('bodyDragon'),MovieClip );
-        var leg0: MovieClip = cast( innerDragon.getChildByName('leg0'),MovieClip );
-        var leg1: MovieClip = cast( innerDragon.getChildByName('leg1'),MovieClip );
-        var leg2: MovieClip = cast( innerDragon.getChildByName('leg2'),MovieClip );
-        var leg3: MovieClip = cast( innerDragon.getChildByName('leg3'),MovieClip );
-        glowLeg0 = cast( leg0.getChildByName('glow'),MovieClip );
-        glowLeg1 = cast( leg1.getChildByName('glow'),MovieClip );
-        glowLeg2 = cast( leg2.getChildByName('glow'),MovieClip );
-        glowLeg3 = cast( leg3.getChildByName('glow'),MovieClip );
-        glowDragon = cast( bodyDragon.getChildByName('glowDragon'),MovieClip );
+        var child = MovieUtil.child; // so that it finds using.
+        var innerDragon = clip.child( 'innerDragon' );
+        var bodyDragon = innerDragon.child( 'bodyDragon' );
+        var legs = [  innerDragon.child( 'leg0' )
+                    , innerDragon.child( 'leg1' )
+                    , innerDragon.child( 'leg2' )
+                    , innerDragon.child( 'leg3' ) ];
+        for( i in 0...legs.length ) glowLegs[ i ] = child( legs[ i ], 'glow' );
+        glowDragon = bodyDragon.child( 'glowDragon' );
         glow = 0.;
     }
     public
@@ -94,8 +88,7 @@ class Dragon {
         } else {
             holder.x-= speed;
         }
-        
-        holder.y += 3*(Math.random() - 0.5);
+        //holder.y += 3*(Math.random() - 0.5);
         if( holder.x > maxX && forward ){
             holder.scaleX = -1.;
             forward = false;
