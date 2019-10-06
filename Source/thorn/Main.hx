@@ -19,7 +19,7 @@ import thorn.visual.Background;
 import thorn.visual.Foreground;
 
 import thorn.pathway.SvgToSegment;
-import justPath.SvgPath;
+import trilateral.justPath.SvgPath;
 
 class Main extends Sprite {
     var dragon: Dragon;
@@ -37,54 +37,184 @@ class Main extends Sprite {
         keyboardInteraction = new KeyboardInteraction();
         keyboardInteraction.update = update;
         addEventListener( Event.ENTER_FRAME, this_onEnterFrame );
-        //drawButton( 50, 50, 0x00FF00 );
+        createButtons();
     }
-    function testSvgRouteCreation(){
-            /*   Functionality not tested debugged but is doing the right type of stuff but moveTo is not covered */
-        var segment = new SvgToSegment();
-        var path = new SvgPath( segment );
-        var d="M10,150 A15 15 180 0 1 70 140 A15 25 180 0 0 130 130 A15 55 180 0 1 190 120";
-        path.parse( d );
-        var equaPoints = segment.getEquaPoints( 10000 );
+    function createButtons(){
+        var colors = [ 
+                0xFF99d8c9
+                , 0xFF66c2a4
+                , 0xFF41ae76
+                
+                , 0xFFbfd3e6
+                , 0xFF9ebcda
+                , 0xFF8c96c6
+                , 0xFF8c6bb1
+                , 0xFF88419d
+                
+                , 0xFFf7fcf0
+                , 0xFFe0f3db
+                , 0xFFccebc5
+                , 0xFFa8ddb5
+                , 0xFF7bccc4
+                
+                , 0xFF4eb3d3
+                , 0xFF2b8cbe
+                
+                , 0xFFfff7ec
+                , 0xFFfee8c8
+                , 0xFFfdd49e
+                , 0xFFfdbb84
+                , 0xFFfc8d59
+                , 0xFFef6548
+                , 0xFFd7301f
+                , 0xFFb30000
+                , 0xFF7f0000
+                , 0xFFfff7fb
+                , 0xFFece7f2
+                , 0xFFd0d1e6
+                , 0xFFa6bddb
+                , 0xFF74a9cf
+                , 0xFF3690c0
+                , 0xFF0570b0
+                , 0xFF045a8d
+                , 0xFF023858
+                , 0xFFfff7fb
+                , 0xFFece2f0
+                , 0xFFd0d1e6
+                , 0xFFa6bddb
+                , 0xFF67a9cf
+                , 0xFF3690c0
+                , 0xFF02818a
+                , 0xFF016c59
+                , 0xFF014636
+                , 0xFFf7f4f9
+                , 0xFFe7e1ef
+                , 0xFFd4b9da
+                , 0xFFc994c7
+                , 0xFFdf65b0
+                , 0xFFe7298a
+                , 0xFFce1256
+                , 0xFF980043
+                , 0xFF67001f
+                , 0xFFfff7f3
+                , 0xFFfde0dd
+                , 0xFFfcc5c0
+                , 0xFFfa9fb5
+                , 0xFFf768a1
+                , 0xFFdd3497
+                , 0xFFae017e
+                , 0xFF7a0177
+                , 0xFF49006a
+                , 0xFFffffe5
+                , 0xFFf7fcb9
+                , 0xFFd9f0a3
+                , 0xFFaddd8e
+                , 0xFF78c679
+                , 0xFF41ab5d
+                , 0xFF238443
+                , 0xFF006837
+                , 0xFF004529
+                , 0xFFffffd9
+                , 0xFFedf8b1
+                , 0xFFc7e9b4
+                , 0xFF7fcdbb
+                , 0xFF41b6c4
+                , 0xFF1d91c0
+                , 0xFF225ea8
+                , 0xFF253494
+                , 0xFF081d58
+                , 0xFFffffe5
+                , 0xFFfff7bc
+                , 0xFFfee391
+                , 0xFFfec44f
+                , 0xFFfe9929
+                , 0xFFec7014
+                , 0xFFcc4c02
+                , 0xFF993404
+                , 0xFF662506
+                , 0xFFffffcc
+                , 0xFFffeda0
+                , 0xFFfed976
+                , 0xFFfeb24c
+                , 0xFFfd8d3c
+                , 0xFFfc4e2a
+                , 0xFFe31a1c
+                , 0xFFbd0026
+                , 0xFF800026
+                 ];
+       var snd = [   glider1
+                   , glider2
+                   , glider3
+                   , tinyGrunt1
+                   , tinyGrunt2
+                   , tinyGrunt3
+                   , tinyGrunt4 
+                   , tinyGrunt5
+                   , tinyHappy1
+                   , tinyHappy2
+                   , tinyHappy3
+                   , tinyHappy4
+                   , tinyHappy5
+                   , dragonGrunt1
+                   , dragonGrunt2
+                   , dragonFoot1
+                   , dragonFoot2
+                   , dragonFoot3
+                   , dragonFoot4
+                   , dragonFont5
+                   , ambient
+                   ];
+        var space = 0;
+        var jump = 22;
+        for( j in 0...colors.length ){
+            if( j == 3 ) space+= jump;
+            if( j == 3 + 5 ) space += jump;
+            if( j == 3 + 5 + 5 ) space += jump;
+            if( j == 3 + 5 + 5 + 2 ) space += jump;
+            if( j == 3 + 5 + 5 + 2 + 5  ) space += jump;
+            if( j == 3 + 5 + 5 + 2 + 5 + 1 ) space += jump + jump;
+            var b = drawButton(10 + 25*j + space, 10, 16, 16, colors[j] );
+            b.buttonDown = playMusic.bind( snd[j] );
+        }
     }
-    function createBackground(){
-        background = new Background( this );
-    }
-    function createForeground(){
-        foreground = new Foreground( this );
-    }
+    function createBackground() background = new Background( this );
+    function createForeground() foreground = new Foreground( this );
     function createMonsters(){
         dragon = new Dragon( cast this );
         bat    = new Bat( this );
         tiny   = new Tiny( this );
     }
     function hitDragon( x: Float, y: Float ): Bool {
-        var over = simpleHit( dragon.holder, new Point( x, y ) );//pixelPerfectHitTest( dragon.holder, new Point( x, y ) );
-        if( over ){
-            //dragon.holder.alpha = 0.5;
-            dragon.updateState( OVER );
-        } else {
-            //dragon.holder.alpha = 1;
-            dragon.updateState( OUT );
-        }
+        var over = simpleHit( dragon.holder, x, y );
+        ( over )? dragon.updateState( OVER ): dragon.updateState( OUT );
         return over;
     }
-    function drawButton( x: Float, y: Float, c: Int ){
-        var testButton: TestButton = new TestButton( this, x, y, c );
-        testButton.buttonDown = playMusic;
+    function hitBat( x: Float, y: Float ): Bool {
+        var over = simpleHit( bat.holder, x, y );
+        ( over )? bat.updateState( OVER ): bat.updateState( OUT );
+        return over;
     }
-    function playMusic(){
-        soundController = new SoundController();
-        soundController.playTiny();
+    function hitMonkey( x: Float, y: Float ): Bool {
+        var over = simpleHit( tiny.holder, x, y );
+        ( over )? tiny.updateState( OVER ): tiny.updateState( OUT );
+        return over;
+    }
+    function drawButton( x: Float, y: Float, w: Float, h: Float, c: Int ): TestButton {
+        return new TestButton( this, x, y, w, h, c );
+    }
+    function playMusic( sound: JakeSound ){
+        if( soundController == null ) soundController = new SoundController();
+        soundController.playTiny( sound );
     }
     function this_onEnterFrame( event: Event ): Void {
         var currentTime = Lib.getTimer();
         var current = Lib.current;
         var stage = current.stage;
-        tiny.position( stage.mouseX - tiny.holder.width/2, stage.mouseY - tiny.holder.height/2 );
+        //tiny.position( stage.mouseX - tiny.holder.width/2, stage.mouseY - tiny.holder.height/2 );
         dragon.update();
-        trace( hitDragon( stage.mouseX, stage.mouseY ) );
-        
+        trace( 'hitDragon '+ hitDragon( stage.mouseX, stage.mouseY ) );
+        trace( 'hitBat ' + hitBat( stage.mouseX, stage.mouseY ) );
+        trace( 'hitMonkey ' + hitMonkey( stage.mouseX, stage.mouseY ) );
     }
     inline
     function update(): Void {
@@ -112,46 +242,7 @@ class Main extends Sprite {
         //hitDragon( bat.holder.x, bat.holder.y );
         keyboardInteraction.resetArrows();
     }
-    public static function simpleHit( object: DisplayObject, point: Point ): Bool {
-        return object.hitTestPoint(point.x, point.y, true);
-    }
-    
-    // way too much overhead and not working with scale?
-	public static function pixelPerfectHitTest( object: DisplayObject, point: Point ):Bool {
-		/* If we're already dealing with a BitmapData object then we just use the hitTest
-		 * method of that BitmapData.
-		 */
-		if(Std.is(object,Bitmap)) {
-			return cast(object,Bitmap).bitmapData.hitTest(new Point(0,0), 0, object.globalToLocal(point));
-		}
-		else
-		{
-				
-			/* First we check if the hitTestPoint method returns false. If it does, that
-			 * means that we definitely do not have a hit, so we return false. But if this
-			 * returns true, we still don't know 100% that we have a hit because it might
-			 * be a transparent part of the image. 
-			 */
-			if(!object.hitTestPoint(point.x, point.y, true)) {
-				return false;
-			}
-			else {
-				/* So now we make a new BitmapData object and draw the pixels of our object
-				 * in there. Then we use the hitTest method of that BitmapData object to
-				 * really find out of we have a hit or not.
-				 */
-				var bmapData:BitmapData = new BitmapData(Std.int(object.width), Std.int(object.height), true, 0x00000000);
-				bmapData.draw(object, new Matrix());
-				
-				var returnVal:Bool = bmapData.hitTest(new Point(0,0), 0, object.globalToLocal(point));
-				
-				bmapData.dispose();
-				
-				return returnVal;
-			}
-		}
-	}
-
-    
-    
+    public static function simpleHit( object: DisplayObject, x: Float, y: Float ): Bool {
+        return object.hitTestPoint( x, y, true);
+    }   
 }

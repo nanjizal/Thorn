@@ -20,10 +20,10 @@ abstract State( Int ){
 }
 class Dragon {
     public var holder: Sprite;
-    var maxX = 700.;
-    var minX = 0;
+    var maxX = 1500.;
+    var minX = -500;
     var forward = true;
-    var speed = 2.;
+    var speed = 4.;
     var clip: MovieClip;
     var state = OUT;
     var glowDragon: MovieClip;
@@ -50,7 +50,7 @@ class Dragon {
         createGlowDragon();
         clip.scaleX = -1;
         clip.x = 0.;
-        clip.y = 310.;
+        clip.y = 302.;
         holder.addChild( clip );
     }
     function createGlowDragon(){

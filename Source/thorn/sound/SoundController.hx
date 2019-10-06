@@ -1,43 +1,68 @@
 package thorn.sound;
 import thorn.video.SimpleVideoPlayer;
+
+@:enum
+abstract JakeSound( String ) to String from String {
+    var glider1      = 'glader_1.mp3';
+    var glider2      = 'glader_2.mp3';
+    var glider3      = 'glader_3.mp3';
+    var tinyGrunt1   = 'angry_tiny_grunt_1.mp3';
+    var tinyGrunt2   = 'angry_tiny_grunt_2.mp3';
+    var tinyGrunt3   = 'angry_tiny_grunt_3.mp3';
+    var tinyGrunt4   = 'angry_tiny_grunt_4.mp3';
+    var tinyGrunt5   = 'angry_tiny_grunt_5.mp3';
+    var tinyHappy1   = 'happy_tiny_grunt_1.mp3';
+    var tinyHappy2   = 'happy_tiny_grunt_2.mp3';
+    var tinyHappy3   = 'happy_tiny_grunt_3.mp3';
+    var tinyHappy4   = 'happy_tiny_grunt_4.mp3';
+    var tinyHappy5   = 'happy_tiny_grunt_5.mp3';
+    var tinyEat1     = 'eat_tiny_grunt_1.mp3';
+    var dragonGrunt1 = 'dragon_grunt_1.mp3';
+    var dragonGrunt2 = 'dragon_grunt_2.mp3';
+    var dragonFoot1 = 'dragon_footsteps_1.mp3';
+    var dragonFoot2 = 'dragon_footsteps_2.mp3';
+    var dragonFoot3 = 'dragon_footsteps_3.mp3';
+    var dragonFoot4 = 'dragon_footsteps_4.mp3';
+    var dragonFont5 = 'dragon_footsteps_5.mp3';
+    var ambient     = 'ambient_1.mp3';
+}
 class SoundController {
     // tiny
     // glider
     // dragon
-    
-    var s0 = 'TAP_High_01.mp3';
-    var s1 = 'TAP_High_01.ogg';
-    var s2 = 'TAP_High_02.mp3';
-    var s3 = 'TAP_High_02.ogg';
-    var s4 = 'TAP_low_02.mp3';
-    var s5 = 'TAP_low_02.ogg';
-    var s6 = 'TAP_low01.mp3';
-    var s7 = 'TAP_low01.ogg';
-    var s8 = 'TAP01.wav';
-    var s9 = 'TAP02.wav';
-    var s10 = 'TAP03.wav';
-    var s11 = 'TAPLow01.wav';
-    var s12 = 'TAPLow02.wav';
-    var s13 = 'TAPLow03.wav';
-    var s14 = 'TAPLow04.wav';
-    var s15 = 'TAPLow05.wav';
-    var starsSound: String = 'AMBIENT -  MP3 TEST 1.mp3';//'stars.mp3';
-    
-    var tinySound: SimpleVideoPlayer;
-    var gliderSound: SimpleVideoPlayer;
-    var dragonSound: SimpleVideoPlayer;
-    var ambientSound: SimpleVideoPlayer;
-    
-    public function new(){
-        tinySound = new SimpleVideoPlayer();
-        gliderSound = new SimpleVideoPlayer();
-        dragonSound = new SimpleVideoPlayer();
+    var tinySound:      SimpleVideoPlayer;
+    var gliderSound:    SimpleVideoPlayer;
+    var dragonSound:    SimpleVideoPlayer;
+    var ambientSound:   SimpleVideoPlayer;
+    public
+    function new(){
+        tinySound    = new SimpleVideoPlayer();
+        gliderSound  = new SimpleVideoPlayer();
+        dragonSound  = new SimpleVideoPlayer();
         ambientSound = new SimpleVideoPlayer();
     }
-    public function playTiny(){
-        tinySound.source = s3;
-        //tinySound.loop = true;
+    public
+    function playTiny( sound: JakeSound,?loop: Bool = true ){
+        tinySound.source = sound;
+        if( loop == true ) tinySound.loop = true;
         tinySound.play();
     }
-    
+    public
+    function playGlider( sound: JakeSound, ?loop: Bool = true ){
+        gliderSound.source = sound;
+        if( loop == true ) gliderSound.loop = true;
+        gliderSound.play();
+    }
+    public
+    function playDragon( sound: JakeSound, ?loop: Bool = true ){
+        dragonSound.source = sound;
+        if( loop == true ) dragonSound.loop = true;
+        dragonSound.play();
+    }
+    public
+    function playAmient( sound: JakeSound, ?loop: Bool = true ){
+        ambientSound.source = sound;
+        if( loop == true ) ambientSound.loop = true;
+        ambientSound.play();
+    }
 }

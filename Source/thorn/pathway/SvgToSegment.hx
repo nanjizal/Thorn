@@ -1,6 +1,6 @@
 package thorn.pathway;
 import openfl.geom.Point;
-import justPath.IPathContext;
+import trilateral.justPath.IPathContext;
 import trilateral.geom.Algebra;
 import thorn.pathway.Equa;
 
