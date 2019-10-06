@@ -30,6 +30,12 @@ class Dragon {
     var glowLeg1: MovieClip;
     var glowLeg2: MovieClip;
     var glowLeg3: MovieClip;
+    // getter and setter of glow.
+    // this should be tweenable eg: 
+    // Actuate.tween(this, 1., { glow: 1. }).ease( Quad.easeInOut );//.delay(1);
+    // although Actuate maybe expecting a MovieClip ?
+    // since getter and setter change in Haxe you need to get Actuate from github not install eg:
+    // haxelib git actuate <clone path>
     @:isVar public var glow(get, set):Float;
     function get_glow() {
       return glow;
@@ -66,8 +72,8 @@ class Dragon {
         glowDragon = cast( bodyDragon.getChildByName('glowDragon'),MovieClip );
         glow = 0.;
     }
-    
-    public function updateState( state: State ){
+    public
+    function updateState( state: State ){
         if( state != OVER ){
             // tweens don't work for this well?
             //Actuate.tween(this, 1., { glow: 1. }).ease( Quad.easeInOut );//.delay(1);
@@ -79,12 +85,11 @@ class Dragon {
             //Actuate.tween(this, 1., { glow: 0. }).ease( Quad.easeInOut );//.delay(1);
         }
     }
-    
-    public function update(){
+    public
+    function update(){
         backforward();
     }
     function backforward(){
-        
         if( forward ){
             holder.x+= speed;
         } else {
