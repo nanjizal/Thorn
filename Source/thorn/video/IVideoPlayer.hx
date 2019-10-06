@@ -1,4 +1,4 @@
-package video;
+package thorn.video;
 // borrowed from Away3D
 import openfl.display.Sprite;
 import openfl.media.SoundTransform;

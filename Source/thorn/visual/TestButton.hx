@@ -1,4 +1,4 @@
-package visual;
+package thorn.visual;
 import openfl.display.MovieClip;
 import openfl.display.Sprite;
 import openfl.events.Event;

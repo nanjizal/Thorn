@@ -1,4 +1,4 @@
-package;
+package thorn;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.display.Sprite;
@@ -7,15 +7,17 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
-import video.SimpleVideoPlayer;
-import sound.SoundController;
-import visual.Dragon;
-import visual.Bat;
-import visual.Tiny;
-import visual.TestButton;
-import interaction.KeyboardInteraction;
-import visual.Background;
-import visual.Foreground;
+
+import thorn.video.SimpleVideoPlayer;
+import thorn.sound.SoundController;
+import thorn.visual.Dragon;
+import thorn.visual.Bat;
+import thorn.visual.Tiny;
+import thorn.visual.TestButton;
+import thorn.interaction.KeyboardInteraction;
+import thorn.visual.Background;
+import thorn.visual.Foreground;
+
 class Main extends Sprite {
     var dragon: Dragon;
     var bat: Bat;

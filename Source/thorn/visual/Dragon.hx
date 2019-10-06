@@ -1,4 +1,4 @@
-package visual;
+package thorn.visual;
 import openfl.display.MovieClip;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -7,8 +7,7 @@ import openfl.events.MouseEvent;
 import openfl.utils.ByteArray;
 import openfl.Assets;
 import openfl.Lib;
-import video.SimpleVideoPlayer;
-import sound.SoundController;
+
 import motion.easing.Quad;
 import motion.easing.Linear;
 import motion.Actuate;

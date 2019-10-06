@@ -1,5 +1,5 @@
-package sound;
-import video.SimpleVideoPlayer;
+package thorn.sound;
+import thorn.video.SimpleVideoPlayer;
 class SoundController {
     // tiny
     // glider

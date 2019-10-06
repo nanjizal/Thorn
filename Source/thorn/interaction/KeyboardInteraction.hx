@@ -1,4 +1,4 @@
-package interaction;
+package thorn.interaction;
 import openfl.Lib;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;

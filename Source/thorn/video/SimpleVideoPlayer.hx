@@ -1,4 +1,4 @@
-package video;
+package thorn.video;
 
 import openfl.display.Sprite;
 import openfl.events.AsyncErrorEvent;
