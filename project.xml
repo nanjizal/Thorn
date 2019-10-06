@@ -7,6 +7,7 @@
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
+    <haxelib name="justPath"/>
 	<haxelib name="layout" />
 	<haxelib name="trilateral" />
     <haxelib name="actuate" />

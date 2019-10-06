@@ -18,6 +18,9 @@ import thorn.interaction.KeyboardInteraction;
 import thorn.visual.Background;
 import thorn.visual.Foreground;
 
+import thorn.pathway.SvgToSegment;
+import justPath.SvgPath;
+
 class Main extends Sprite {
     var dragon: Dragon;
     var bat: Bat;
@@ -35,6 +38,14 @@ class Main extends Sprite {
         keyboardInteraction.update = update;
         addEventListener( Event.ENTER_FRAME, this_onEnterFrame );
         //drawButton( 50, 50, 0x00FF00 );
+    }
+    function testSvgRouteCreation(){
+            /*   Functionality not tested debugged but is doing the right type of stuff but moveTo is not covered */
+        var segment = new SvgToSegment();
+        var path = new SvgPath( segment );
+        var d="M10,150 A15 15 180 0 1 70 140 A15 25 180 0 0 130 130 A15 55 180 0 1 190 120";
+        path.parse( d );
+        var equaPoints = segment.getEquaPoints( 10000 );
     }
     function createBackground(){
         background = new Background( this );
