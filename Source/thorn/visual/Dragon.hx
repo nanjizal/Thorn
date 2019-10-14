@@ -11,13 +11,15 @@ import thorn.visual.MovieUtil;
 import motion.easing.Quad;
 import motion.easing.Linear;
 import motion.Actuate;
-
+import thorn.visual.State;
 using thorn.visual.MovieUtil;
+/*
 @:enum
 abstract State( Int ){
     var OUT = 0;
     var OVER = 1;
 }
+*/
 class Dragon {
     public var holder: Sprite;
     var maxX = 1500.;
@@ -66,17 +68,24 @@ class Dragon {
         glow = 0.;
     }
     public
-    function updateState( state: State ){
-        if( state != OVER ){
+    function down( x: Float, y: Float ): Bool {
+        var isDown = MovieUtil.hit( holder, x, y );
+        return isDown;
+    }
+    public
+    function over( x: Float, y: Float ): Bool {
+        var isOver = MovieUtil.hit( holder, x, y );
+        if( !isOver && state != OVER ){
             // tweens don't work for this well?
             //Actuate.tween(this, 1., { glow: 1. }).ease( Quad.easeInOut );//.delay(1);
             glow = 1;
             state = OVER;
-        } else if( state != OUT ){
+        } else if( !isOver && state != OUT ){
             state = OUT;
             glow = 0;
             //Actuate.tween(this, 1., { glow: 0. }).ease( Quad.easeInOut );//.delay(1);
         }
+        return isOver;
     }
     public
     function update(){

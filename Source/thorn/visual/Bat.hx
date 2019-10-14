@@ -12,7 +12,6 @@ import motion.Actuate;
 import thorn.visual.Dragon;
 using thorn.visual.MovieUtil;
 class Bat extends BaseMonster {
-
     public function new( scope: Sprite ){
         super( scope, 'glider' );
         var child = MovieUtil.child; // so that it finds using.
@@ -23,13 +22,8 @@ class Bat extends BaseMonster {
         move( 1, 1 );
         holder.alpha = 0.9;
     }
-
     override public function move( x: Float, y: Float ){
         super.move( x, y );
-        if( y < 0 ){
-            holder.rotation = -90;
-        } else {
-            holder.rotation = 0;
-        }
+        ( y < 0 )? holder.rotation = -90: holder.rotation = 0;
     }
 }

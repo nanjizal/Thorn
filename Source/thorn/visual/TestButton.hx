@@ -9,13 +9,17 @@ import openfl.Assets;
 import openfl.Lib;
 class TestButton {
     public var buttonDown: Void->Void;
-    public function new( scope: Sprite, x: Float, y: Float, w: Float, h: Float, c: Int ){
-        draw( scope, x, y, w, h, c );
+    public function new(  scope:    Sprite
+                        , x: Float, y: Float, w: Float, h: Float
+                        , c: Int  , alpha: Float ){
+        draw( scope, x, y, w, h, c, alpha );
     }
-    public function draw( scope: Sprite, x: Float, y: Float, w: Float, h: Float, c: Int ){
+    public function draw( scope:    Sprite
+                        , x: Float, y: Float, w: Float, h: Float
+                        , c: Int  , alpha: Float ){
         var but = new Sprite();
         var g = but.graphics;
-        g.beginFill( c, 0.5 );
+        g.beginFill( c, alpha );
         g.lineStyle( 0, c, 1 );
         g.drawRect( 0, 0, w, h );
         g.endFill();

@@ -893,9 +893,9 @@ ApplicationMain.create = function(config) {
 	ManifestResources.init(config);
 	var _this = app.meta;
 	if(__map_reserved["build"] != null) {
-		_this.setReserved("build","11");
+		_this.setReserved("build","15");
 	} else {
-		_this.h["build"] = "11";
+		_this.h["build"] = "15";
 	}
 	var _this1 = app.meta;
 	if(__map_reserved["company"] != null) {
@@ -4202,134 +4202,83 @@ openfl_display_Sprite.prototype = $extend(openfl_display_DisplayObjectContainer.
 	,__properties__: $extend(openfl_display_DisplayObjectContainer.prototype.__properties__,{get_graphics:"get_graphics",set_buttonMode:"set_buttonMode",get_buttonMode:"get_buttonMode"})
 });
 var thorn_Main = function() {
+	this.dMove = 4;
 	openfl_display_Sprite.call(this);
-	this.createBackground();
-	this.createMonsters();
-	this.createForeground();
+	this.createScene();
 	this.keyboardInteraction = new thorn_interaction_KeyboardInteraction();
 	this.keyboardInteraction.update = $bind(this,this.update);
 	this.addEventListener("enterFrame",$bind(this,this.this_onEnterFrame));
-	this.createButtons();
+	this.addEventListener("mouseDown",$bind(this,this.down));
+	this.addEventListener("mouseUp",$bind(this,this.up));
+	this.addEventListener("mouseMove",$bind(this,this.move));
+	new thorn_visual_BottomButtons(this);
 };
 $hxClasses["thorn.Main"] = thorn_Main;
 thorn_Main.__name__ = "thorn.Main";
-thorn_Main.simpleHit = function(object,x,y) {
-	return object.hitTestPoint(x,y,true);
-};
 thorn_Main.__super__ = openfl_display_Sprite;
 thorn_Main.prototype = $extend(openfl_display_Sprite.prototype,{
-	dragon: null
+	dMove: null
+	,dragon: null
 	,bat: null
 	,tiny: null
+	,isUp: null
 	,background: null
 	,foreground: null
 	,soundController: null
 	,keyboardInteraction: null
-	,createButtons: function() {
-		var colors = [-6694711,-10042716,-12472714,-4205594,-6374182,-7563578,-7574607,-7847523,-525072,-2034725,-3347515,-5710411,-8663868,-11619373,-13923138,-2068,-71480,-142178,-148604,-225959,-1088184,-2674657,-5046272,-8454144,-2053,-1251342,-3091994,-5849637,-9131569,-13201216,-16420688,-16491891,-16631720,-2053,-1252624,-3091994,-5849637,-9983537,-13201216,-16612982,-16683943,-16693706,-527111,-1580561,-2836006,-3566393,-2136656,-1627766,-3272106,-6815677,-10026977,-2061,-139043,-211520,-352331,-563039,-2280297,-5373570,-8781449,-11992982,-27,-525127,-2494301,-5382770,-8862087,-12473507,-14449597,-16750537,-16759511,-39,-1181519,-3675724,-8401477,-12470588,-14839360,-14524760,-14338924,-16245416,-27,-2116,-72815,-80817,-91863,-1282028,-3388414,-6736892,-10083066,-52,-4704,-75402,-85428,-160452,-242134,-1893860,-4390874,-8388570];
-		var snd = ["glader_1.mp3","glader_2.mp3","glader_3.mp3","angry_tiny_grunt_1.mp3","angry_tiny_grunt_2.mp3","angry_tiny_grunt_3.mp3","angry_tiny_grunt_4.mp3","angry_tiny_grunt_5.mp3","happy_tiny_grunt_1.mp3","happy_tiny_grunt_2.mp3","happy_tiny_grunt_3.mp3","happy_tiny_grunt_4.mp3","happy_tiny_grunt_5.mp3","dragon_grunt_1.mp3","dragon_grunt_2.mp3","dragon_footsteps_1.mp3","dragon_footsteps_2.mp3","dragon_footsteps_3.mp3","dragon_footsteps_4.mp3","dragon_footsteps_5.mp3","ambient_1.mp3"];
-		var space = 0;
-		var jump = 22;
-		var _g = 0;
-		var _g1 = colors.length;
-		while(_g < _g1) {
-			var j = _g++;
-			if(j == 3) {
-				space += jump;
-			}
-			if(j == 8) {
-				space += jump;
-			}
-			if(j == 13) {
-				space += jump;
-			}
-			if(j == 15) {
-				space += jump;
-			}
-			if(j == 20) {
-				space += jump;
-			}
-			if(j == 21) {
-				space += jump + jump;
-			}
-			var b = this.drawButton(10 + 25 * j + space,10,16,16,colors[j]);
-			b.buttonDown = (function(sound,f) {
-				return function() {
-					f[0](sound[0]);
-				};
-			})([snd[j]],[$bind(this,this.playMusic)]);
+	,down: function(e) {
+		var mouseX = this.stage.get_mouseX();
+		var mouseY = this.stage.get_mouseY();
+		this.dragon.down(mouseX,mouseY);
+		if(this.bat.down(mouseX,mouseY)) {
+			this.bat.position(mouseX,mouseY);
+		}
+		this.bat.down(mouseX,mouseY);
+		this.tiny.down(mouseX,mouseY);
+		this.isUp = false;
+	}
+	,move: function(e) {
+		var mouseX = this.stage.get_mouseX();
+		var mouseY = this.stage.get_mouseY();
+		if(!this.isUp) {
+			this.bat.position(mouseX,mouseY);
 		}
 	}
-	,createBackground: function() {
+	,up: function(e) {
+		this.isUp = true;
+	}
+	,createScene: function() {
 		this.background = new thorn_visual_Background(this);
-	}
-	,createForeground: function() {
-		this.foreground = new thorn_visual_Foreground(this);
-	}
-	,createMonsters: function() {
 		this.dragon = new thorn_visual_Dragon(this);
 		this.bat = new thorn_visual_Bat(this);
 		this.tiny = new thorn_visual_Tiny(this);
-	}
-	,hitDragon: function(x,y) {
-		var over = thorn_Main.simpleHit(this.dragon.holder,x,y);
-		if(over) {
-			this.dragon.updateState(1);
-		} else {
-			this.dragon.updateState(0);
-		}
-		return over;
-	}
-	,hitBat: function(x,y) {
-		var over = thorn_Main.simpleHit(this.bat.holder,x,y);
-		if(over) {
-			this.bat.updateState(1);
-		} else {
-			this.bat.updateState(0);
-		}
-		return over;
-	}
-	,hitMonkey: function(x,y) {
-		var over = thorn_Main.simpleHit(this.tiny.holder,x,y);
-		if(over) {
-			this.tiny.updateState(1);
-		} else {
-			this.tiny.updateState(0);
-		}
-		return over;
-	}
-	,drawButton: function(x,y,w,h,c) {
-		return new thorn_visual_TestButton(this,x,y,w,h,c);
-	}
-	,playMusic: function(sound) {
-		if(this.soundController == null) {
-			this.soundController = new thorn_sound_SoundController();
-		}
-		this.soundController.playTiny(sound);
+		this.foreground = new thorn_visual_Foreground(this);
 	}
 	,this_onEnterFrame: function(event) {
 		var currentTime = openfl_Lib.getTimer();
 		var current = openfl_Lib.get_current();
 		var stage = current.stage;
 		this.dragon.update();
-		haxe_Log.trace("hitDragon " + Std.string(this.hitDragon(stage.get_mouseX(),stage.get_mouseY())),{ fileName : "Source/thorn/Main.hx", lineNumber : 215, className : "thorn.Main", methodName : "this_onEnterFrame"});
-		haxe_Log.trace("hitBat " + Std.string(this.hitBat(stage.get_mouseX(),stage.get_mouseY())),{ fileName : "Source/thorn/Main.hx", lineNumber : 216, className : "thorn.Main", methodName : "this_onEnterFrame"});
-		haxe_Log.trace("hitMonkey " + Std.string(this.hitMonkey(stage.get_mouseX(),stage.get_mouseY())),{ fileName : "Source/thorn/Main.hx", lineNumber : 217, className : "thorn.Main", methodName : "this_onEnterFrame"});
+		var mouseX = stage.get_mouseX();
+		var mouseY = stage.get_mouseY();
+		this.dragon.over(mouseX,mouseY);
+		this.bat.over(mouseX,mouseY);
+		this.tiny.over(mouseX,mouseY);
 	}
 	,update: function() {
 		if(this.keyboardInteraction.upDown) {
-			this.bat.move(0,-4);
+			this.bat.move(0,-this.dMove);
 		} else if(this.keyboardInteraction.downDown) {
-			this.bat.move(0,4);
+			this.bat.move(0,this.dMove);
 		}
 		if(this.keyboardInteraction.leftDown) {
-			this.bat.move(-4,0);
-			this.background.move(4,0);
-			this.foreground.move(4,0);
+			this.bat.move(-this.dMove,0);
+			this.background.move(this.dMove,0);
+			this.foreground.move(this.dMove,0);
 		} else if(this.keyboardInteraction.rightDown) {
-			this.bat.move(4,0);
-			this.background.move(-4,0);
-			this.foreground.move(-4,0);
+			this.bat.move(this.dMove,0);
+			this.background.move(-this.dMove,0);
+			this.foreground.move(-this.dMove,0);
 		}
 		var _this = this.keyboardInteraction;
 		_this.leftDown = false;
@@ -4525,7 +4474,7 @@ ManifestResources.init = function(config) {
 		ManifestResources.rootPath = "";
 	}
 	lime_utils_Assets.defaultRootPath = ManifestResources.rootPath;
-	var data = "{\"name\":\"swf-library\",\"assets\":\"aoy4:pathy26:lib%2Fswf-library%2F55.pngy4:sizei990y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y26:lib%2Fswf-library%2F48.pngR2i18139R3R4R5R7R6tgoR0y26:lib%2Fswf-library%2F20.pngR2i1825428R3R4R5R8R6tgoR0y26:lib%2Fswf-library%2F53.pngR2i5089R3R4R5R9R6tgoR0y26:lib%2Fswf-library%2F32.pngR2i11022R3R4R5R10R6tgoR0y26:lib%2Fswf-library%2F24.pngR2i32995R3R4R5R11R6tgoR0y26:lib%2Fswf-library%2F36.pngR2i35155R3R4R5R12R6tgoR0y26:lib%2Fswf-library%2F28.pngR2i9794R3R4R5R13R6tgoR0y35:lib%2Fswf-library%2Fswf-library.binR2i74027R3y4:TEXTR5R14R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[\"lib/swf-library/swf-library.bin\"],\"libraryType\":\"openfl._internal.formats.swf.SWFLiteLibrary\"}";
+	var data = "{\"name\":\"swf-library\",\"assets\":\"aoy4:pathy26:lib%2Fswf-library%2F20.pngy4:sizei1825428y4:typey5:IMAGEy2:idR1y7:preloadtgoR0y26:lib%2Fswf-library%2F23.pngR2i32995R3R4R5R7R6tgoR0y26:lib%2Fswf-library%2F24.pngR2i32995R3R4R5R8R6tgoR0y26:lib%2Fswf-library%2F26.pngR2i9794R3R4R5R9R6tgoR0y26:lib%2Fswf-library%2F27.pngR2i9794R3R4R5R10R6tgoR0y26:lib%2Fswf-library%2F28.pngR2i9794R3R4R5R11R6tgoR0y26:lib%2Fswf-library%2F30.pngR2i11022R3R4R5R12R6tgoR0y26:lib%2Fswf-library%2F31.pngR2i11022R3R4R5R13R6tgoR0y26:lib%2Fswf-library%2F32.pngR2i11022R3R4R5R14R6tgoR0y26:lib%2Fswf-library%2F34.pngR2i35155R3R4R5R15R6tgoR0y26:lib%2Fswf-library%2F35.pngR2i35155R3R4R5R16R6tgoR0y26:lib%2Fswf-library%2F36.pngR2i35155R3R4R5R17R6tgoR0y26:lib%2Fswf-library%2F48.jpgR2i6810R3R4R5R18R6tgoR0y26:lib%2Fswf-library%2F48.pngR2i18139R3R4R5R19R6tgoR0y27:lib%2Fswf-library%2F48a.pngR2i6436R3R4R5R20R6tgoR0y26:lib%2Fswf-library%2F50.pngR2i990R3R4R5R21R6tgoR0y26:lib%2Fswf-library%2F52.pngR2i5089R3R4R5R22R6tgoR0y26:lib%2Fswf-library%2F53.pngR2i5089R3R4R5R23R6tgoR0y26:lib%2Fswf-library%2F54.pngR2i990R3R4R5R24R6tgoR0y26:lib%2Fswf-library%2F55.pngR2i990R3R4R5R25R6tgoR0y35:lib%2Fswf-library%2Fswf-library.binR2i74027R3y4:TEXTR5R26R6tgh\",\"rootPath\":null,\"version\":2,\"libraryArgs\":[\"lib/swf-library/swf-library.bin\"],\"libraryType\":\"openfl._internal.formats.swf.SWFLiteLibrary\"}";
 	var manifest = lime_utils_AssetManifest.parse(data,ManifestResources.rootPath);
 	var library = lime_utils_AssetLibrary.fromManifest(manifest);
 	lime_utils_Assets.registerLibrary("swf-library",library);
@@ -25164,7 +25113,7 @@ var lime_utils_AssetCache = function() {
 	this.audio = new haxe_ds_StringMap();
 	this.font = new haxe_ds_StringMap();
 	this.image = new haxe_ds_StringMap();
-	this.version = 19672;
+	this.version = 944790;
 };
 $hxClasses["lime.utils.AssetCache"] = lime_utils_AssetCache;
 lime_utils_AssetCache.__name__ = "lime.utils.AssetCache";
@@ -76470,27 +76419,38 @@ thorn_visual_BaseMonster.prototype = {
 	,holder: null
 	,clip: null
 	,currentScope: null
-	,updateState: function(state) {
-		if(state != 1) {
+	,down: function(x,y) {
+		var isDown = this.holder.hitTestPoint(x,y,true);
+		return isDown;
+	}
+	,over: function(x,y) {
+		var isOver = this.holder.hitTestPoint(x,y,true);
+		if(!isOver && this.state != 1) {
 			this.set_glow(1);
-			state = 1;
-		} else if(state != 0) {
-			state = 0;
+			this.state = 1;
+		} else if(!isOver && this.state != 0) {
+			this.state = 0;
 			this.set_glow(0);
 		}
+		return isOver;
 	}
 	,move: function(x,y) {
-		if(x < 0) {
-			this.holder.set_scaleX(1);
-		} else if(x > 0) {
-			this.holder.set_scaleX(-1);
-		}
 		var _g = this.holder;
 		_g.set_x(_g.get_x() + x);
 		var _g1 = this.holder;
 		_g1.set_y(_g1.get_y() + y);
+		if(x > 0) {
+			this.holder.set_scaleX(-1);
+		} else {
+			this.holder.set_scaleX(1);
+		}
 	}
 	,position: function(x,y) {
+		if(x > this.holder.get_x()) {
+			this.holder.set_scaleX(-1);
+		} else {
+			this.holder.set_scaleX(1);
+		}
 		this.holder.set_x(x);
 		this.holder.set_y(y);
 	}
@@ -76528,6 +76488,66 @@ thorn_visual_Bat.prototype = $extend(thorn_visual_BaseMonster.prototype,{
 	}
 	,__class__: thorn_visual_Bat
 });
+var thorn_visual_BottomButtons = function(scope_) {
+	this.colors = [-6694711,-10042716,-12472714,-4205594,-6374182,-7563578,-7574607,-7847523,-525072,-2034725,-3347515,-5710411,-8663868,-11619373,-13923138,-2068,-71480,-142178,-148604,-225959,-1088184,-2674657,-5046272,-8454144,-2053,-1251342,-3091994,-5849637,-9131569,-13201216,-16420688,-16491891,-16631720,-2053,-1252624,-3091994,-5849637,-9983537,-13201216,-16612982,-16683943,-16693706,-527111,-1580561,-2836006,-3566393,-2136656,-1627766,-3272106,-6815677,-10026977,-2061,-139043,-211520,-352331,-563039,-2280297,-5373570,-8781449,-11992982,-27,-525127,-2494301,-5382770,-8862087,-12473507,-14449597,-16750537,-16759511,-39,-1181519,-3675724,-8401477,-12470588,-14839360,-14524760,-14338924,-16245416,-27,-2116,-72815,-80817,-91863,-1282028,-3388414,-6736892,-10083066,-52,-4704,-75402,-85428,-160452,-242134,-1893860,-4390874,-8388570];
+	this.jump = 22;
+	this.space = 0;
+	this.buttonDim = 16;
+	this.stageHeight = 600;
+	this.scope = scope_;
+	var snd = ["glader_1.mp3","glader_2.mp3","glader_3.mp3","angry_tiny_grunt_1.mp3","angry_tiny_grunt_2.mp3","angry_tiny_grunt_3.mp3","angry_tiny_grunt_4.mp3","angry_tiny_grunt_5.mp3","happy_tiny_grunt_1.mp3","happy_tiny_grunt_2.mp3","happy_tiny_grunt_3.mp3","happy_tiny_grunt_4.mp3","happy_tiny_grunt_5.mp3","dragon_grunt_1.mp3","dragon_grunt_2.mp3","dragon_footsteps_1.mp3","dragon_footsteps_2.mp3","dragon_footsteps_3.mp3","dragon_footsteps_4.mp3","dragon_footsteps_5.mp3","ambient_1.mp3"];
+	var len = this.colors.length;
+	var _g = 0;
+	var _g1 = len;
+	while(_g < _g1) {
+		var j = _g++;
+		if(j == 3) {
+			this.space += this.jump;
+		}
+		if(j == 8) {
+			this.space += this.jump;
+		}
+		if(j == 13) {
+			this.space += this.jump;
+		}
+		if(j == 15) {
+			this.space += this.jump;
+		}
+		if(j == 20) {
+			this.space += this.jump;
+		}
+		if(j == 21) {
+			this.space += this.jump + this.jump;
+		}
+		var b = this.drawButton(10 + 25 * j + this.space,this.stageHeight - 30,this.buttonDim,this.buttonDim,this.colors[j]);
+		b.buttonDown = (function(sound,f) {
+			return function() {
+				f[0](sound[0]);
+			};
+		})([snd[j]],[$bind(this,this.playMusic)]);
+	}
+};
+$hxClasses["thorn.visual.BottomButtons"] = thorn_visual_BottomButtons;
+thorn_visual_BottomButtons.__name__ = "thorn.visual.BottomButtons";
+thorn_visual_BottomButtons.prototype = {
+	scope: null
+	,stageHeight: null
+	,buttonDim: null
+	,space: null
+	,jump: null
+	,soundController: null
+	,colors: null
+	,drawButton: function(x,y,w,h,c) {
+		return new thorn_visual_TestButton(this.scope,x,y,w,h,c,0.4);
+	}
+	,playMusic: function(sound) {
+		if(this.soundController == null) {
+			this.soundController = new thorn_sound_SoundController();
+		}
+		this.soundController.playTiny(sound);
+	}
+	,__class__: thorn_visual_BottomButtons
+};
 var thorn_visual_Dragon = function(scope) {
 	this.glowLegs = [];
 	this.state = 0;
@@ -76592,14 +76612,20 @@ thorn_visual_Dragon.prototype = {
 		this.glowDragon = mc6;
 		this.set_glow(0.);
 	}
-	,updateState: function(state) {
-		if(state != 1) {
+	,down: function(x,y) {
+		var isDown = this.holder.hitTestPoint(x,y,true);
+		return isDown;
+	}
+	,over: function(x,y) {
+		var isOver = this.holder.hitTestPoint(x,y,true);
+		if(!isOver && this.state != 1) {
 			this.set_glow(1);
-			state = 1;
-		} else if(state != 0) {
-			state = 0;
+			this.state = 1;
+		} else if(!isOver && this.state != 0) {
+			this.state = 0;
 			this.set_glow(0);
 		}
+		return isOver;
 	}
 	,update: function() {
 		this.backforward();
@@ -76658,17 +76684,20 @@ thorn_visual_MovieUtil.child = function(parent,name) {
 	var mc = js_Boot.__cast(parent.getChildByName(name) , openfl_display_MovieClip);
 	return mc;
 };
-var thorn_visual_TestButton = function(scope,x,y,w,h,c) {
-	this.draw(scope,x,y,w,h,c);
+thorn_visual_MovieUtil.hit = function(object,x,y) {
+	return object.hitTestPoint(x,y,true);
+};
+var thorn_visual_TestButton = function(scope,x,y,w,h,c,alpha) {
+	this.draw(scope,x,y,w,h,c,alpha);
 };
 $hxClasses["thorn.visual.TestButton"] = thorn_visual_TestButton;
 thorn_visual_TestButton.__name__ = "thorn.visual.TestButton";
 thorn_visual_TestButton.prototype = {
 	buttonDown: null
-	,draw: function(scope,x,y,w,h,c) {
+	,draw: function(scope,x,y,w,h,c,alpha) {
 		var but = new openfl_display_Sprite();
 		var g = but.get_graphics();
-		g.beginFill(c,0.5);
+		g.beginFill(c,alpha);
 		g.lineStyle(0,c,1);
 		g.drawRect(0,0,w,h);
 		g.endFill();

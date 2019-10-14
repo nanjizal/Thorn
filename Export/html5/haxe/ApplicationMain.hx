@@ -32,7 +32,7 @@ class ApplicationMain
 
 		ManifestResources.init(config);
 
-		app.meta["build"] = "11";
+		app.meta["build"] = "15";
 		app.meta["company"] = "OpenFL";
 		app.meta["file"] = "thorn";
 		app.meta["name"] = "Thorn SWF";
